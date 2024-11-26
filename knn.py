@@ -54,3 +54,9 @@ async def recommend(request: Request):
     result = recommender_by_id(anime_id, mat_anime, n)
     return {"recommendations": result} 
 
+import uvicorn
+import os
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))  # Render sẽ cung cấp cổng trong biến PORT
+    uvicorn.run("knn:app", host="0.0.0.0", port=port)
+
