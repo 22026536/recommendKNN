@@ -16,7 +16,7 @@ df_anime = pd.DataFrame(list(db["Anime"].find()))
 
 ################################## knn
 
-animes_users = df_ratings.pivot(index="anime_id", columns="user_id", values="rating").fillna(0)
+animes_users = df_ratings.pivot(index="Anime_id", columns="User_id", values="Rating").fillna(0)
 mat_anime = csr_matrix(animes_users.values)
 
 model = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20)
