@@ -33,10 +33,8 @@ def recommender_by_id(anime_id, mat_anime, n):
     
     for i in indices.flatten():
         if i != idx:  # Loại bỏ anime hiện tại
-            recommendations.append({
-                "Anime_id": int(df_anime['Anime_id'].iloc[i]),  # Chuyển đổi sang int
-                "Name": str(df_anime['Name'].iloc[i])  # Chuyển đổi sang str
-            })
+           # Trả về tất cả thông tin của anime
+            recommendations.append(df_anime.iloc[i].to_dict())  # Chuyển dòng của DataFrame thành dictionary
     return recommendations
 
 
