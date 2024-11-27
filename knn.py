@@ -14,6 +14,14 @@ db = client["anime_tango2"]
 df_ratings = pd.DataFrame(list(db["UserRating"].find()))
 df_anime = pd.DataFrame(list(db["Anime"].find()))
 
+# Chuyển đổi ObjectId trong DataFrame
+df_ratings['_id'] = df_ratings['_id'].astype(str)
+df_ratings['Anime_id'] = df_ratings['Anime_id'].astype(str)
+df_ratings['User_id'] = df_ratings['User_id'].astype(str)
+
+df_anime['_id'] = df_anime['_id'].astype(str)
+df_anime['Anime_id'] = df_anime['Anime_id'].astype(str)
+
 ################################## knn
 
 animes_users = df_ratings.pivot(index="Anime_id", columns="User_id", values="Rating").fillna(0)
@@ -23,7 +31,6 @@ model = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20)
 model.fit(mat_anime)
 
 def recommender_by_id(anime_id, mat_anime, n):
-    # Kiểm tra nếu anime_id có trong dữ liệu
     if anime_id not in df_anime['Anime_id'].values:
         return {"error": "Anime ID không tồn tại"}
     
@@ -33,11 +40,22 @@ def recommender_by_id(anime_id, mat_anime, n):
     
     for i in indices.flatten():
         if i != idx:  # Loại bỏ anime hiện tại
-           # Trả về tất cả thông tin của anime
-            recommendations.append(df_anime.iloc[i].to_dict())  # Chuyển dòng của DataFrame thành dictionary
+            # Chuyển đổi ObjectId thành string
+            anime_data = df_anime.iloc[i].to_dict()
+            anime_data['_id'] = str(anime_data['_id'])  # Chuyển đổi ObjectId
+            recommendations.append(anime_data)
     return recommendations
 
+from bson import ObjectId
 
+def jsonable(data):
+    if isinstance(data, list):
+        return [jsonable(item) for item in data]
+    elif isinstance(data, dict):
+        return {key: jsonable(value) for key, value in data.items()}
+    elif isinstance(data, ObjectId):
+        return str(data)
+    return data
 
 @app.post("/")
 async def recommend(request: Request):
@@ -49,8 +67,8 @@ async def recommend(request: Request):
         return {"error": "Vui lòng cung cấp anime_id"}
 
     # Gọi hàm recommender_by_id
-    result = recommender_by_id(anime_id, mat_anime, n)
-    return {"recommendations": result} 
+    result = jsonable(recommender_by_id(anime_id, mat_anime, n))
+    return result
 
 import uvicorn
 import os
