@@ -84,7 +84,7 @@ def jsonable(data):
 @app.post("/")
 async def recommend(request: Request):
     data = await request.json()
-    anime_id = data.get("anime_id").astype(str)
+    anime_id = str(data.get("anime_id"))
     n = data.get("n", 10)  # Số lượng gợi ý, mặc định là 10
 
     if anime_id is None:
