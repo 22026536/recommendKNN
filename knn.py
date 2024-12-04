@@ -28,12 +28,12 @@ df_favorites = pd.DataFrame(list(db["UserFavorites"].find()))  # Thay đổi th�
 df_anime = pd.DataFrame(list(db["Anime"].find()))
 
 # Chuyển đổi ObjectId trong DataFrame
-df_favorites['_id'] = df_favorites['_id'].astype(str)
-df_favorites['User_id'] = df_favorites['User_id'].astype(str)
+# df_favorites['_id'] = df_favorites['_id'].astype(str)
+# df_favorites['User_id'] = df_favorites['User_id'].astype(str)
 df_favorites['favorites'] = df_favorites['favorites'].apply(lambda x: [str(i) for i in x])  # Chuyển đổi các Anime_id trong favorites thành string
 
-df_anime['_id'] = df_anime['_id'].astype(str)
-df_anime['Anime_id'] = df_anime['Anime_id'].astype(str)
+# df_anime['_id'] = df_anime['_id'].astype(str)
+# df_anime['Anime_id'] = df_anime['Anime_id'].astype(str)
 
 ################################## KNN
 
