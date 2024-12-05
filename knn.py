@@ -58,7 +58,7 @@ model.fit(mat_anime)
 # Hàm gợi ý anime theo anime_id
 def recommender_by_id(anime_id, mat_anime, n):
     if anime_id not in animes_users.index:
-        return {"error": "Anime_id không tồn tại"}
+        return {"error": "Anime ID không tồn tại"}
 
     idx = animes_users.index.get_loc(anime_id)
     distances, indices = model.kneighbors(mat_anime[idx], n_neighbors=n)
