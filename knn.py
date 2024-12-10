@@ -88,7 +88,7 @@ async def recommend(request: Request):
     n = data.get("n", 10)  # Số lượng gợi ý, mặc định là 10
 
     if anime_id is None:
-        return {"error": "Vui lòng cung cấp anime_id"}
+        return {"error": "Vui lòng cung cấp animeId"}
 
     # Gọi hàm recommender_by_id
     result = jsonable(recommender_by_id(anime_id, mat_anime, n))
