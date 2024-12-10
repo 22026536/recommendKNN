@@ -10,6 +10,14 @@ app = FastAPI()
 
 from fastapi.middleware.cors import CORSMiddleware
 
+# Thêm middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://animetangobackend.onrender.com"],  # Cho phép tất cả origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Kết nối MongoDB
 client = MongoClient("mongodb+srv://sangvo22026526:5anG15122003@cluster0.rcd65hj.mongodb.net/anime_tango2")
